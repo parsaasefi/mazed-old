@@ -5,10 +5,12 @@ class ProcessController {
   static getProcessor(req, res) {
     const eventEmitter = new events.EventEmitter();
 
+    // Listener to handle the given information
     eventEmitter.on('info', info => {
       res.send('Cool');
     });
 
+    // Listener to handle the errors
     eventEmitter.on('error', err => {
       res.json({ errors: err });
     });
