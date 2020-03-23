@@ -1,4 +1,5 @@
 const url = require('url');
+const followRedirect = require('follow-redirect-url');
 
 const shorteners = require('../datasets/shorteners.json');
 
@@ -39,6 +40,17 @@ class URIHelper {
     }
 
     return url.format(parsedURI);
+  }
+
+  /**
+   * Follow URI redirects
+   * @param {string} uri URI to follow its redirects
+   * @returns {Promise} The last destination
+   */
+  static follow(uri) {
+    return followRedirect
+      .startFollowing(uri)
+      .then(urls => urls.slice(-1)[0].url);
   }
 }
 
