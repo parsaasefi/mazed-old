@@ -24,6 +24,8 @@ class ProcessController {
     }
 
     const uri = URIHelper.removeWWW(URIHelper.addProtocol(req.query.uri));
+    const forceUpdate =
+      req.query.update && req.query.update.toLowerCase() === 'true';
 
     if (!URIHelper.isShortened(uri)) {
       return eventEmitter.emit('error', 'IS_NOT_SHORTENED');
