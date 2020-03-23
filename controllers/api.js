@@ -7,7 +7,7 @@ class APIController {
   }
 
   static getShorteners(req, res) {
-    res.json(shorteners.domains);
+    res.json(shorteners.hosts);
   }
 
   static getTrackingParams(req, res) {

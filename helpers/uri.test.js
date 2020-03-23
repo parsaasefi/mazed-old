@@ -18,3 +18,9 @@ test('Remove www from the URI', () => {
   );
   expect(URIHelper.removeWWW('https://sample.com')).toBe('https://sample.com/');
 });
+
+test('Check if the URI is shortened', () => {
+  expect(URIHelper.isShortened('https://bit.ly')).toBe(true);
+  expect(URIHelper.isShortened('https://BiT.ly')).toBe(true);
+  expect(URIHelper.isShortened('https://sample.com')).toBe(false);
+});

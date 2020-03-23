@@ -1,5 +1,7 @@
 const url = require('url');
 
+const shorteners = require('../datasets/shorteners.json');
+
 class URIHelper {
   /**
    * Add protocol to URI if it doesn't already have
@@ -9,6 +11,17 @@ class URIHelper {
   static addProtocol(uri) {
     const pattern = /^http/i;
     return pattern.test(uri) ? uri : `https://${uri}`;
+  }
+
+  /**
+   * Check if a URI is shortened using hosts from shorteners dataset
+   * @param {string} uri URI to check if is shortened
+   * @returns {string} true if the URI is shortened
+   */
+  static isShortened(uri) {
+    const { hostname } = url.parse(uri);
+    const { hosts } = shorteners;
+    return hosts.includes(hostname);
   }
 
   /**

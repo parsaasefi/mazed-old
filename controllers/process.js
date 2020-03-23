@@ -1,13 +1,15 @@
 const { validationResult } = require('express-validator');
 const events = require('events');
 
+const URIHelper = require('../helpers/uri');
+
 class ProcessController {
   static getProcessor(req, res) {
     const eventEmitter = new events.EventEmitter();
 
     // Listener to handle the given information
     eventEmitter.on('info', info => {
-      res.send('Cool');
+      res.send(info);
     });
 
     // Listener to handle the errors
@@ -21,7 +23,9 @@ class ProcessController {
       return eventEmitter.emit('error', validatorErrors.array());
     }
 
-    return res.send('Cool!');
+    const uri = URIHelper.removeWWW(URIHelper.addProtocol(req.query.uri));
+
+    return res.send(uri);
   }
 }
 
