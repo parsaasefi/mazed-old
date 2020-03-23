@@ -21,6 +21,9 @@ class ProcessController {
       res.json({ errors: err });
     });
 
+    /*
+     * All the validations
+     */
     const validatorErrors = validationResult(req);
 
     if (!validatorErrors.isEmpty()) {
