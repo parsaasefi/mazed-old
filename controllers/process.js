@@ -1,6 +1,14 @@
+const { validationResult } = require('express-validator');
+
 class ProcessController {
   static getProcessor(req, res) {
-    res.send('Hello World');
+    const validatorErrors = validationResult(req);
+
+    if (!validatorErrors.errors()) {
+      return res.json({ errors: validatorErrors.array() });
+    }
+
+    return true;
   }
 }
 
