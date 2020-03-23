@@ -8,3 +8,13 @@ test('Add protocol to the URI', () => {
     'https://sample.com/TeSt'
   );
 });
+
+test('Remove www from the URI', () => {
+  expect(URIHelper.removeWWW('https://www.sample.com')).toBe(
+    'https://sample.com/'
+  );
+  expect(URIHelper.removeWWW('https://WwW.sample.com')).toBe(
+    'https://sample.com/'
+  );
+  expect(URIHelper.removeWWW('https://sample.com')).toBe('https://sample.com/');
+});
