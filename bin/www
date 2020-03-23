@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+
+const http = require('http');
+const path = require('path');
+const dotenv = require('dotenv');
+const clear = require('console-clear');
+
+const app = require('../app');
+
+dotenv.config({
+  path: path.resolve(__dirname, '../.env'),
+});
+
+const server = http.createServer(app);
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+  clear(true);
+
+  console.log(`Server running on http://localhost:${port}`);
+});
