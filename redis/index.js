@@ -19,3 +19,5 @@ class Redis {
     this.client = redis.createClient(options);
   }
 }
+
+module.exports = Redis;

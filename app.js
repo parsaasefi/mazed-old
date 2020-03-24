@@ -8,10 +8,14 @@ const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
 const processRouter = require('./routes/process');
 
+const Redis = require('./redis');
+
 const app = express();
+const redis = new Redis();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set('redis', redis);
 
 app.use(morgan('tiny'));
 app.use(helmet());
