@@ -1,57 +1,47 @@
-const { validationResult } = require('express-validator');
 const events = require('events');
 
 const URIHelper = require('../helpers/uri');
 
 class ProcessController {
   static async getProcessor(req, res) {
-    const eventEmitter = new events.EventEmitter();
+    try {
+      const eventEmitter = new events.EventEmitter();
 
-    /*
-     * Listener to handle the given information
-     */
-    eventEmitter.on('info', info => {
-      res.json(info);
-    });
+      eventEmitter.on('info', uriInfo => {
+        res.json(uriInfo);
+      });
 
-    /*
-     * Listener to handle the errors
-     */
-    eventEmitter.on('error', err => {
-      res.json({ errors: err });
-    });
+      eventEmitter.on('error', err => {
+        throw new Error(err);
+      });
 
-    /*
-     * All the validations
-     */
-    const validatorErrors = validationResult(req);
+      const validation = URIHelper.validate(req);
 
-    if (!validatorErrors.isEmpty()) {
-      return eventEmitter.emit('error', validatorErrors.array());
-    }
+      if (!validation.valid)
+        return eventEmitter.emit('error', validation.error);
 
-    const uri = URIHelper.removeWWW(URIHelper.addProtocol(req.query.uri));
-    const forceUpdate =
-      req.query.update && req.query.update.toLowerCase() === 'true';
+      const uri = URIHelper.removeWWW(URIHelper.addProtocol(req.query.uri));
+      const { update } = req.query;
+      const useRedis = !(update && update.toLowerCase() === 'true');
 
-    if (!URIHelper.isShortened(uri)) {
-      return eventEmitter.emit('error', 'IS_NOT_SHORTENED');
-    }
+      if (!useRedis) {
+        try {
+          const destination = await URIHelper.follow(uri);
+          const safe = true;
+          const lastUpdate = Date.now();
+          const info = {
+            destination,
+            safe,
+            lastUpdate,
+          };
 
-    /*
-     * Don't use Redis cache if forceUpdate is set to true
-     */
-    if (forceUpdate) {
-      const destination = await URIHelper.follow(uri);
-      const safe = true;
-      const lastUpdate = Date.now();
-      const info = {
-        destination,
-        safe,
-        lastUpdate,
-      };
-
-      eventEmitter.emit('info', info);
+          eventEmitter.emit('info', info);
+        } catch (err) {
+          eventEmitter.emit('error', err);
+        }
+      }
+    } catch (err) {
+      return res.json({ erros: err.message });
     }
 
     return true;
