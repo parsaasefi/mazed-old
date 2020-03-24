@@ -24,8 +24,29 @@ class ProcessController {
       const { update } = req.query;
       const useRedis = !(update && update.toLowerCase() === 'true');
 
+      /*
+       * If useRedis is set to false, don't use Redis to get URI information
+       */
       if (!useRedis) {
-        try {
+        const destination = await URIHelper.follow(uri);
+        const safe = true;
+        const lastUpdate = Date.now();
+        const info = {
+          destination,
+          safe,
+          lastUpdate,
+        };
+
+        await req.app.get('redis').addURI(uri, info);
+        eventEmitter.emit('info', info);
+      } else {
+        /*
+         * if useRedis is set to true, first try to get URI information from Redis
+         */
+        const redisResult = await req.app.get('redis').getURI(uri);
+
+        if (redisResult) eventEmitter.emit('info', redisResult);
+        else {
           const destination = await URIHelper.follow(uri);
           const safe = true;
           const lastUpdate = Date.now();
@@ -35,9 +56,8 @@ class ProcessController {
             lastUpdate,
           };
 
+          await req.app.get('redis').addURI(uri, info);
           eventEmitter.emit('info', info);
-        } catch (err) {
-          eventEmitter.emit('error', err);
         }
       }
     } catch (err) {
