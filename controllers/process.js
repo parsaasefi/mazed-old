@@ -11,22 +11,14 @@ class ProcessController {
         res.json(uriInfo);
       });
 
-      eventEmitter.on('error', err => {
-        throw new Error(err);
-      });
-
       const validation = URIHelper.validate(req);
 
-      if (!validation.valid)
-        return eventEmitter.emit('error', validation.error);
+      if (!validation.valid) throw new Error(validation.error);
 
       const uri = URIHelper.removeWWW(URIHelper.addProtocol(req.query.uri));
       const { update } = req.query;
       const useRedis = !(update && update.toLowerCase() === 'true');
 
-      /*
-       * If useRedis is set to false, don't use Redis to get URI information
-       */
       if (!useRedis) {
         const destination = await URIHelper.follow(uri);
         const safe = true;
@@ -40,9 +32,6 @@ class ProcessController {
         await req.app.get('redis').addURI(uri, info);
         eventEmitter.emit('info', info);
       } else {
-        /*
-         * if useRedis is set to true, first try to get URI information from Redis
-         */
         const redisResult = await req.app.get('redis').getURI(uri);
 
         if (redisResult) eventEmitter.emit('info', redisResult);
