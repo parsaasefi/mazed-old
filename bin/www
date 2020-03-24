@@ -12,10 +12,10 @@ dotenv.config({
 });
 
 const server = http.createServer(app);
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-server.listen(port, () => {
+server.listen(PORT, () => {
   clear(true);
 
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
