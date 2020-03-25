@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
+const dotenv = require('dotenv');
+
+dotenv.config({
+  path: path.resolve(__dirname, '../.env'),
+});
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';

@@ -1,14 +1,11 @@
 const fs = require('fs');
 const readline = require('readline');
 const path = require('path');
+const Datastore = require('nedb');
 
-const input = path.join(__dirname, 'datasets/blacklist.txt');
-const output = path.join(__dirname, 'datasets/blacklist.sql');
-
-const table = 'blacklist';
-let counter = 1;
-let query = `DROP TABLE IF EXISTS ${table}\n`;
-query += `CREATE TABLE ${table} (id INT AUTO_INCREMENT PRIMARY KEY, host VARCHAR(255))\n`;
+const input = path.join(__dirname, 'dataset/blacklist.txt');
+const database = path.join(__dirname, 'database/blacklist.db');
+const hosts = [];
 
 const lineReader = readline.createInterface({
   input: fs.createReadStream(input),
@@ -16,16 +13,23 @@ const lineReader = readline.createInterface({
 });
 
 lineReader.on('line', line => {
-  const host = line.slice(1);
-
-  query += `INSERT INTO ${table} (host) VALUES ('${host}')\n`;
-  console.log(`[${counter++}] Added ${host}`);
+  const data = {
+    host: line.slice(1),
+  };
+  hosts.push(data);
 });
 
 lineReader.on('close', () => {
-  fs.writeFile(output, query, err => {
-    if (err) throw new Error(err);
+  const blacklist = new Datastore({
+    filename: database,
+    autoload: true,
+  });
 
-    console.log('blacklist.sql has been generated successfully');
+  blacklist.insert(hosts, err => {
+    if (err) {
+      throw new Error(err);
+    }
+
+    console.log('Blacklist database has been generated successfully.');
   });
 });
