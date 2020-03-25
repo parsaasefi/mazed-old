@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
-    "test": "jest"
+    "test": "jest",
+    "blacklist:generate": "node ./blacklist/generate"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +32,10 @@
     "follow-redirect-url": "^1.0.5",
     "helmet": "^3.21.3",
     "morgan": "^1.10.0",
-    "redis": "^3.0.2"
+    "mysql-import": "^4.0.24",
+    "mysql2": "^2.1.0",
+    "redis": "^3.0.2",
+    "sequelize": "^5.21.5",
+    "sequelize-cli": "^5.5.1"
   }
 }

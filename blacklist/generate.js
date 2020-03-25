@@ -1,14 +1,14 @@
 const fs = require('fs');
 const readline = require('readline');
+const path = require('path');
 
-const input = './datasets/blacklist.txt';
-const output = './datasets/blacklist.sql';
+const input = path.join(__dirname, 'datasets/blacklist.txt');
+const output = path.join(__dirname, 'datasets/blacklist.sql');
 
 const table = 'blacklist';
 let counter = 1;
-let query = `DROP TABLE IF EXISTS ${table}\n
-  CREATE TABLE ${table} (id INT AUTO_INCREMENT PRIMARY KEY, host VARCHAR(255))\n
-`;
+let query = `DROP TABLE IF EXISTS ${table}\n`;
+query += `CREATE TABLE ${table} (id INT AUTO_INCREMENT PRIMARY KEY, host VARCHAR(255))\n`;
 
 const lineReader = readline.createInterface({
   input: fs.createReadStream(input),
@@ -26,6 +26,6 @@ lineReader.on('close', () => {
   fs.writeFile(output, query, err => {
     if (err) throw new Error(err);
 
-    console.log('Blacklist.sql has been generated successfully');
+    console.log('blacklist.sql has been generated successfully');
   });
 });
