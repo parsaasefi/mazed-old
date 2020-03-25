@@ -15,7 +15,7 @@ dotenv.config({
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
-models.sequelize.sync().then(() => {
+Promise.all([models.sequelize.sync(), app.get('blacklist').load()]).then(() => {
   server.listen(PORT, () => {
     clear(true);
 
