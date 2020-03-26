@@ -47,7 +47,7 @@ class SecureHelper {
         .then(res => {
           if (res) {
             const result = {
-              safe: false,
+              isSafe: false,
               type: 'blacklist',
             };
 
@@ -60,14 +60,14 @@ class SecureHelper {
         .then(res => {
           if (res) {
             const result = {
-              safe: false,
+              isSafe: false,
               type: 'dga',
             };
 
             return resolve(result);
           }
 
-          return resolve({ safe: true });
+          return resolve({ isSafe: true });
         })
         .catch(err => reject(err));
     });
