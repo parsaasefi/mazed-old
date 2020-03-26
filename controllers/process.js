@@ -1,6 +1,7 @@
 const events = require('events');
 
 const URIHelper = require('../helpers/uri');
+const SecureHelper = require('../helpers/secure');
 
 class ProcessController {
   static async getProcessor(req, res) {
@@ -21,11 +22,11 @@ class ProcessController {
 
       if (!useRedis) {
         const destination = await URIHelper.follow(uri);
-        const safe = true;
+        const security = await SecureHelper.check(destination);
         const lastUpdate = Date.now();
         const info = {
           destination,
-          safe,
+          security,
           lastUpdate,
         };
 
@@ -37,11 +38,11 @@ class ProcessController {
         if (redisResult) eventEmitter.emit('info', redisResult);
         else {
           const destination = await URIHelper.follow(uri);
-          const safe = true;
+          const secure = await SecureHelper.check(destination);
           const lastUpdate = Date.now();
           const info = {
             destination,
-            safe,
+            secure,
             lastUpdate,
           };
 

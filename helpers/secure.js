@@ -7,7 +7,7 @@ class SecureHelper {
     const hosts = URIHelper.possibleHosts(uri);
 
     return new Promise((resolve, reject) => {
-      Blacklist.get(hosts)
+      Blacklist.get(...hosts)
         .then(res => {
           const result = {};
 
