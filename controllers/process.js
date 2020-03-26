@@ -60,7 +60,7 @@ class ProcessController {
         }
       }
     } catch (err) {
-      return res.json({ erros: err.message });
+      return res.render('process/error');
     }
 
     return true;
