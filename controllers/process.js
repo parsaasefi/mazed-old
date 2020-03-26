@@ -38,11 +38,11 @@ class ProcessController {
         if (redisResult) eventEmitter.emit('info', redisResult);
         else {
           const destination = await URIHelper.follow(uri);
-          const secure = await SecureHelper.check(destination);
+          const security = await SecureHelper.check(destination);
           const lastUpdate = Date.now();
           const info = {
             destination,
-            secure,
+            security,
             lastUpdate,
           };
 

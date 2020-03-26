@@ -18,6 +18,12 @@
       "rules": {
         "no-undef": "off"
       }
+    },
+    {
+      "files": ["secure.js"],
+      "rules": {
+        "no-shadow": "off"
+      }
     }
   ]
 }
