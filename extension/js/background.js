@@ -8,12 +8,18 @@ fetch(`${baseURI}/api/shorteners`)
     chrome.webRequest.onBeforeRequest.addListener(
       details => {
         const { url } = details;
+        const rootPattern = new RegExp('https?://[^/]+?/?(?!.+)', 'i');
+        const isRoot = rootPattern.test(url);
 
-        return {
-          redirectUrl: `${baseURI}/process?uri=${url}`,
-        };
+        if (!isRoot) {
+          return {
+            redirectUrl: `${baseURI}/process?uri=${url}`,
+          };
+        }
+
+        return null;
       },
-      { urls },
+      { urls, types: ['main_frame', 'sub_frame'] },
       ['blocking']
     );
   })
