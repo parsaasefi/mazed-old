@@ -80,6 +80,25 @@ class URIHelper {
       .startFollowing(uri)
       .then(urls => urls.slice(-1)[0].url);
   }
+
+  /**
+   * Get all possible hosts from an URI
+   * @param {string} uri URI to extract hosts
+   * @returns {array} An array containing all possible hosts
+   */
+  static possibleHosts(uri) {
+    const { hostname } = url.parse(uri);
+    const splittedHost = hostname.split('.');
+    const hosts = [hostname];
+
+    if (splittedHost.length >= 3) {
+      for (let i = 1; i < splittedHost.length - 1; i++) {
+        hosts.push(splittedHost.slice(i).join('.'));
+      }
+    }
+
+    return hosts;
+  }
 }
 
 module.exports = URIHelper;
