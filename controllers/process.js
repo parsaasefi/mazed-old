@@ -9,15 +9,19 @@ class ProcessController {
       const eventEmitter = new events.EventEmitter();
 
       eventEmitter.on('info', uriInfo => {
+        const { destination } = uriInfo;
+
         if (!uriInfo.security.isSafe) {
+          const message = 'This is a message to exmplain wtf is going on';
+
           return res.render('process/warning', {
-            destination: uriInfo.destination,
-            message: 'This is a message to exmplain wtf is going on',
+            destination,
+            message,
           });
         }
 
         return res.render('process/success', {
-          destination: uriInfo.destination,
+          destination,
         });
       });
 
