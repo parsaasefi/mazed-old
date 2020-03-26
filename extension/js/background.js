@@ -10,8 +10,12 @@ fetch(`${baseURI}/api/shorteners`)
         const { url } = details;
         const rootPattern = new RegExp('https?://[^/]+?/?(?!.+)', 'i');
         const isRoot = rootPattern.test(url);
+        const parsedURL = new URL(url);
+        const token = parsedURL.searchParams.get('mazed-access-token');
+        const tokenExpireTime = 5000; // MS
+        const isTokenValid = Date.now() - token < tokenExpireTime;
 
-        if (!isRoot) {
+        if (!isRoot && !isTokenValid) {
           return {
             redirectUrl: `${baseURI}/process?uri=${url}`,
           };

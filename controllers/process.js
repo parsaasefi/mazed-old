@@ -1,4 +1,5 @@
 const events = require('events');
+const url = require('url');
 
 const URIHelper = require('../helpers/uri');
 const SecureHelper = require('../helpers/secure');
@@ -9,10 +10,27 @@ class ProcessController {
       const eventEmitter = new events.EventEmitter();
 
       eventEmitter.on('info', uriInfo => {
-        const { destination } = uriInfo;
+        const { destination, shortURI } = uriInfo;
+
+        /*
+         * If the destination and the short URI, have the same host,
+         * it means that the URI is not being redirected.
+         * So we add a Token to the destination and redirect the user
+         * to the new URI. In the extension, if the Token was valid,
+         * the user won't be redirected.
+         */
+        if (URIHelper.sameHost(destination, shortURI)) {
+          const parsedURI = url.parse(shortURI, true);
+
+          parsedURI.query['mazed-access-token'] = Date.now();
+          parsedURI.search = '';
+
+          const uriWithToken = url.format(parsedURI);
+          return res.redirect(uriWithToken);
+        }
 
         if (!uriInfo.security.isSafe) {
-          const message = 'This is a message to exmplain wtf is going on';
+          const message = 'This is a message to explain wtf is going on';
 
           return res.render('process/warning', {
             destination,
@@ -38,6 +56,7 @@ class ProcessController {
         const security = await SecureHelper.check(destination);
         const lastUpdate = Date.now();
         const info = {
+          shortURI: uri,
           destination,
           security,
           lastUpdate,
@@ -54,6 +73,7 @@ class ProcessController {
           const security = await SecureHelper.check(destination);
           const lastUpdate = Date.now();
           const info = {
+            shortURI: uri,
             destination,
             security,
             lastUpdate,

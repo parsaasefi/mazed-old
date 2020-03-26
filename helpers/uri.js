@@ -99,6 +99,19 @@ class URIHelper {
 
     return hosts;
   }
+
+  /**
+   * Compare two URIs to see if the have the same host or not
+   * @param {string} uriA First URI
+   * @param {string} uriB Second URI
+   * @returns {boolean} true if they have the same host
+   */
+  static sameHost(uriA, uriB) {
+    const parsedURIA = url.parse(this.removeWWW(uriA));
+    const parsedURIB = url.parse(this.removeWWW(uriB));
+
+    return parsedURIA.hostname === parsedURIB.hostname;
+  }
 }
 
 module.exports = URIHelper;
