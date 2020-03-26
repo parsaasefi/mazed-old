@@ -9,16 +9,13 @@ const apiRouter = require('./routes/api');
 const processRouter = require('./routes/process');
 
 const Redis = require('./redis');
-const Blacklist = require('./blacklist');
 
 const app = express();
 const redis = new Redis();
-const blacklist = new Blacklist();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('redis', redis);
-app.set('blacklist', blacklist);
 
 app.use(morgan('tiny'));
 app.use(helmet());
