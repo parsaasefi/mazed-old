@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const clear = require('console-clear');
 
 const app = require('../app');
+const database = require('../models/database');
 
 dotenv.config({
   path: path.resolve(__dirname, '../.env'),
@@ -14,8 +15,15 @@ dotenv.config({
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-  clear(true);
+database
+  .connect()
+  .then(() => {
+    server.listen(PORT, () => {
+      clear(true);
 
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    throw new Error(err);
+  });
