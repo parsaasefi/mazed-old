@@ -1,19 +1,13 @@
 const fs = require('fs');
 const readline = require('readline');
 const path = require('path');
-const dotenv = require('dotenv');
 const mariadb = require('mariadb');
 
-const config = require('../config/config.json');
-
-dotenv.config({
-  path: path.resolve(__dirname, '../.env'),
-});
+const config = require('../config/database');
 
 const table = 'blacklist';
 const inputFile = path.join(__dirname, 'dataset/blacklist.txt');
-const env = process.env.NODE_ENV || 'development';
-const { host, port, username: user, password, database } = config[env];
+const { host, port, user, password, database } = config;
 
 const pool = mariadb.createPool({
   host,
