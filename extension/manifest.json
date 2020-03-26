@@ -1,0 +1,10 @@
+{
+  "manifest_version": 2,
+  "name": "Mazed",
+  "description": "Protect your privacy against url shorteners",
+  "version": "0.1",
+  "permissions": ["webRequest", "webRequestBlocking", "<all_urls>"],
+  "background": {
+    "scripts": ["js/background.js"]
+  }
+}

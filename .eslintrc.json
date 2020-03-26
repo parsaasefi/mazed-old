@@ -24,6 +24,12 @@
       "rules": {
         "no-shadow": "off"
       }
+    },
+    {
+      "files": ["extension/**/*"],
+      "rules": {
+        "no-undef": "off"
+      }
     }
   ]
 }
