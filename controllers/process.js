@@ -9,7 +9,7 @@ class ProcessController {
       const eventEmitter = new events.EventEmitter();
 
       eventEmitter.on('info', uriInfo => {
-        res.json(uriInfo);
+        res.render('warning');
       });
 
       const validation = URIHelper.validate(req);
