@@ -14,9 +14,9 @@ class ProcessController {
 
     const uri = URIHelper.removeWWW(URIHelper.addProtocol(req.query.uri));
 
-    if (!URIHelper.isShortened(uri)) {
-      return res.render('process/error');
-    }
+    // if (!URIHelper.isShortened(uri)) {
+    //   return res.render('process/error');
+    // }
 
     req.uri = uri;
     return next();
@@ -97,7 +97,7 @@ class ProcessController {
     } = uriInfo;
 
     if (URIHelper.sameHost(destination, shortURI) && isSafe) {
-      const parsedURI = url.parse(shortURI);
+      const parsedURI = url.parse(destination, true);
 
       parsedURI.query['mazed-access-token'] = Date.now();
       parsedURI.search = '';
