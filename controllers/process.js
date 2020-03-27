@@ -1,5 +1,6 @@
 const url = require('url');
 const { validationResult } = require('express-validator');
+const { format } = require('timeago.js');
 
 const URIHelper = require('../helpers/uri');
 const SecurityHelper = require('../helpers/security');
@@ -105,19 +106,21 @@ class ProcessController {
 
   static sendProcessResult(req, res) {
     const { uriInfo } = req;
-    const { destination } = uriInfo;
+    const { destination, lastUpdate } = uriInfo;
 
     if (!uriInfo.security.isSafe) {
       const message = 'This URI is not safe!';
 
       return res.render('process/warning', {
         destination,
+        lastUpdate: format(lastUpdate),
         message,
       });
     }
 
     return res.render('process/success', {
       destination,
+      lastUpdate: format(lastUpdate),
     });
   }
 }
