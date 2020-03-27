@@ -11,7 +11,7 @@ router.get(
   ProcessController.validateProcess,
   ProcessController.processURI,
   ProcessController.giveAccessToken,
-  ProcessController.showProcessResult
+  ProcessController.sendProcessResult
 );
 
 module.exports = router;

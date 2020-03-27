@@ -90,7 +90,7 @@ class ProcessController {
     return next();
   }
 
-  static showProcessResult(req, res) {
+  static sendProcessResult(req, res) {
     const { uriInfo } = req;
     const { destination } = uriInfo;
 

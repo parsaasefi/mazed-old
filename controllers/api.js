@@ -6,11 +6,11 @@ class APIController {
     res.send('Welcome to Mazed API');
   }
 
-  static getShorteners(req, res) {
+  static sendShorteners(req, res) {
     res.json(shorteners.hosts);
   }
 
-  static getTrackingParams(req, res) {
+  static sendTrackingParams(req, res) {
     res.json(trackers.params);
   }
 }
