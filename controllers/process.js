@@ -12,13 +12,9 @@ class ProcessController {
       return res.render('process/error');
     }
 
-    const uri = URIHelper.removeWWW(URIHelper.addProtocol(req.query.uri));
+    const uri = URIHelper.addProtocol(req.query.uri);
 
-    // if (!URIHelper.isShortened(uri)) {
-    //   return res.render('process/error');
-    // }
-
-    req.uri = uri;
+    req.uri = URIHelper.removeWWW(uri);
     return next();
   }
 
