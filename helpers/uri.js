@@ -2,6 +2,7 @@ const url = require('url');
 const followRedirect = require('follow-redirect-url');
 
 const shorteners = require('../datasets/shorteners.json');
+const trackers = require('../datasets/trackers.json');
 
 class URIHelper {
   /**
@@ -83,6 +84,26 @@ class URIHelper {
     const parsedURIB = url.parse(this.removeWWW(uriB));
 
     return parsedURIA.hostname === parsedURIB.hostname;
+  }
+
+  /**
+   * Remove all known tracking params from the given URI
+   * @param {string} uri URI to remove tracking params from
+   * @returns {string} Clean URI
+   */
+  static removeTrackingParamas(uri) {
+    const parsedURI = url.parse(uri, true);
+    const trackingParams = trackers.params;
+
+    for (const param of Object.keys(parsedURI.query)) {
+      if (trackingParams.includes(param.toLowerCase())) {
+        delete parsedURI.query[param];
+        parsedURI.search = '';
+      }
+    }
+
+    const cleanURI = url.format(parsedURI);
+    return cleanURI;
   }
 }
 
