@@ -5,7 +5,7 @@ const URIHelper = require('./uri');
 
 const Blacklist = require('../models/blacklist');
 
-class SecureHelper {
+class SecurityHelper {
   /**
    * Check if a URI is blacklisted or not
    * @param {string} uri the URI to check
@@ -74,4 +74,4 @@ class SecureHelper {
   }
 }
 
-module.exports = SecureHelper;
+module.exports = SecurityHelper;

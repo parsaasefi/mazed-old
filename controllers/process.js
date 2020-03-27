@@ -2,7 +2,7 @@ const url = require('url');
 const { validationResult } = require('express-validator');
 
 const URIHelper = require('../helpers/uri');
-const SecureHelper = require('../helpers/secure');
+const SecurityHelper = require('../helpers/security');
 
 class ProcessController {
   static validateProcess(req, res, next) {
@@ -30,7 +30,7 @@ class ProcessController {
 
       if (!useRedis) {
         const destination = await URIHelper.follow(uri);
-        const security = await SecureHelper.check(destination);
+        const security = await SecurityHelper.check(destination);
         const lastUpdate = Date.now();
         const info = {
           shortURI: uri,
@@ -51,7 +51,7 @@ class ProcessController {
           next();
         } else {
           const destination = await URIHelper.follow(uri);
-          const security = await SecureHelper.check(destination);
+          const security = await SecurityHelper.check(destination);
           const lastUpdate = Date.now();
           const info = {
             shortURI: uri,
