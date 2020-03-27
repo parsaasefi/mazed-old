@@ -90,9 +90,13 @@ class ProcessController {
 
   static giveAccessToken(req, res, next) {
     const { uriInfo } = req;
-    const { destination, shortURI } = uriInfo;
+    const {
+      destination,
+      shortURI,
+      security: { isSafe },
+    } = uriInfo;
 
-    if (URIHelper.sameHost(destination, shortURI)) {
+    if (URIHelper.sameHost(destination, shortURI) && isSafe) {
       const parsedURI = url.parse(shortURI);
 
       parsedURI.query['mazed-access-token'] = Date.now();
