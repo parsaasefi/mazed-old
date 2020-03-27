@@ -1,37 +1,9 @@
 const url = require('url');
 const followRedirect = require('follow-redirect-url');
-const { validationResult } = require('express-validator');
 
 const shorteners = require('../datasets/shorteners.json');
 
 class URIHelper {
-  /**
-   * Validate the process request
-   * @param {object} req Request object from process controller
-   * @returns {object} if valid is false, there will be an error message
-   */
-  static validate(req) {
-    const validationErrors = validationResult(req);
-
-    if (!validationErrors.isEmpty)
-      return {
-        valid: false,
-        error: 'URI_IS_NOT_VALID',
-      };
-
-    const uri = this.removeWWW(this.addProtocol(req.query.uri));
-
-    if (!this.isShortened(uri))
-      return {
-        valid: false,
-        error: 'URI_IS_NO_SHORTENED',
-      };
-
-    return {
-      valid: true,
-    };
-  }
-
   /**
    * Add protocol to URI if it doesn't already have
    * @param {string} uri URI which is going to get added protocol
