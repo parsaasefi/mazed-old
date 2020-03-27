@@ -25,8 +25,9 @@ class ProcessController {
   static async processURI(req, res, next) {
     try {
       const { uri } = req;
-      const { update } = req.query;
+      const { update, rp } = req.query;
       const useRedis = !(update && update.toLowerCase() === 'true');
+      const removeParams = !(rp && rp.toLowerCase() === 'false');
 
       if (!useRedis) {
         const destination = await URIHelper.follow(uri);
@@ -41,12 +42,22 @@ class ProcessController {
 
         await req.app.get('redis').addURI(uri, info);
 
+        info.destination = removeParams
+          ? URIHelper.removeTrackingParamas(destination)
+          : destination;
+
         req.uriInfo = info;
         next();
       } else {
         const redisResult = await req.app.get('redis').getURI(uri);
 
         if (redisResult) {
+          const { destination } = redisResult;
+
+          redisResult.destination = removeParams
+            ? URIHelper.removeTrackingParamas(destination)
+            : destination;
+
           req.uriInfo = redisResult;
           next();
         } else {
@@ -61,6 +72,10 @@ class ProcessController {
           };
 
           await req.app.get('redis').addURI(uri, info);
+
+          info.destination = removeParams
+            ? URIHelper.removeTrackingParamas(destination)
+            : destination;
 
           req.uriInfo = info;
           next();
