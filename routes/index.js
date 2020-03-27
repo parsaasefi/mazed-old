@@ -4,6 +4,6 @@ const IndexController = require('../controllers/index');
 
 const router = express.Router();
 
-router.get('/', IndexController.getRoot);
+router.get('/', IndexController.renderHome);
 
 module.exports = router;

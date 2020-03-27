@@ -1,5 +1,5 @@
 class IndexController {
-  static getRoot(req, res) {
+  static renderHome(req, res) {
     res.render('index');
   }
 }
