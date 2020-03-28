@@ -1,6 +1,6 @@
 const { escape } = require('sqlstring');
 
-const database = require('./database').connection;
+const database = require('./database');
 
 class Blacklist {
   static get(...hosts) {
@@ -16,15 +16,7 @@ class Blacklist {
       }
     }
 
-    return new Promise((resolve, reject) => {
-      database.query(query, (err, res) => {
-        if (err) {
-          return reject(err);
-        }
-
-        return resolve(res);
-      });
-    });
+    return database.connection.query(query);
   }
 }
 

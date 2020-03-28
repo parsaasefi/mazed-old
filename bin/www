@@ -16,7 +16,7 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
 database
-  .connect()
+  .init()
   .then(() => {
     server.listen(PORT, () => {
       clear(true);
