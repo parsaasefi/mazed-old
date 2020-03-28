@@ -5,7 +5,7 @@ class TokenHelper {
     const chars =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
     const shuffledChars = _.shuffle(chars.split(''));
-    const tokenSize = 16;
+    const tokenSize = 20;
     const tokenChars = [];
 
     for (let i = 0; i < tokenSize; i++) {
