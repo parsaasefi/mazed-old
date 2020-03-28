@@ -7,6 +7,7 @@ const path = require('path');
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
 const processRouter = require('./routes/process');
+const tokenRouter = require('./routes/token');
 
 const Redis = require('./redis');
 
@@ -25,5 +26,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/process', processRouter);
+app.use('/token', tokenRouter);
 
 module.exports = app;
