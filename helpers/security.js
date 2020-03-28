@@ -3,7 +3,7 @@ const dgadetective = require('dgadetective');
 
 const URIHelper = require('./uri');
 
-const Blacklist = require('../models/blacklist');
+const BlacklistModel = require('../models/blacklist');
 
 class SecurityHelper {
   /**
@@ -15,7 +15,7 @@ class SecurityHelper {
     const hosts = URIHelper.possibleHosts(uri);
 
     return new Promise((resolve, reject) => {
-      Blacklist.get(...hosts)
+      BlacklistModel.get(...hosts)
         .then(res => resolve(res.length > 0))
         .catch(err => reject(err));
     });

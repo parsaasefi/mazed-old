@@ -49,7 +49,7 @@ class Database {
 
   createTables() {
     const tokensTable =
-      'CREATE TABLE IF NOT EXISTS tokens (id INT AUTO_INCREMENT PRIMARY KEY, token VARCHAR(255))';
+      'CREATE TABLE IF NOT EXISTS tokens (id INT AUTO_INCREMENT PRIMARY KEY, token VARCHAR(255), creation INT, expiration INT)';
     const queries = [];
 
     queries.push(this.connection.query(tokensTable));

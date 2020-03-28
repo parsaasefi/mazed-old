@@ -1,8 +1,8 @@
 const { escape } = require('sqlstring');
 
-const database = require('./database');
+const Database = require('./database');
 
-class Blacklist {
+class BlacklistModel {
   static get(...hosts) {
     let query = 'SELECT * FROM blacklist WHERE ';
     let counter = 0;
@@ -16,8 +16,8 @@ class Blacklist {
       }
     }
 
-    return database.connection.query(query);
+    return Database.connection.query(query);
   }
 }
 
-module.exports = Blacklist;
+module.exports = BlacklistModel;
