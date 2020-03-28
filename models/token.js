@@ -1,6 +1,6 @@
 const Database = require('./database');
 
-class TokensModel {
+class TokenModel {
   static addToken(token, creation, expiration) {
     return Database.connection.query(
       'INSERT INTO tokens (token, creation, expiration) VALUES (?, ?, ?)',
@@ -9,4 +9,4 @@ class TokensModel {
   }
 }
 
-module.exports = TokensModel;
+module.exports = TokenModel;
