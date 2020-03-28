@@ -21,10 +21,10 @@ class ProcessController {
     try {
       const { uri } = req;
       const { update, rp } = req.query;
-      const useRedis = !(update && update.toLowerCase() === 'true');
+      const useCache = !(update && update.toLowerCase() === 'true');
       const removeParams = !(rp && rp.toLowerCase() === 'false');
 
-      if (useRedis) {
+      if (useCache) {
         const redisResult = await req.app.get('redis').getURI(uri);
 
         if (redisResult) {
