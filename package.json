@@ -28,6 +28,7 @@
     "dgadetective": "^1.0.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
     "follow-redirect-url": "^1.0.5",
