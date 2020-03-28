@@ -24,26 +24,7 @@ class ProcessController {
       const useRedis = !(update && update.toLowerCase() === 'true');
       const removeParams = !(rp && rp.toLowerCase() === 'false');
 
-      if (!useRedis) {
-        const destination = await URIHelper.follow(uri);
-        const security = await SecurityHelper.check(destination);
-        const lastUpdate = Date.now();
-        const info = {
-          shortURI: uri,
-          destination,
-          security,
-          lastUpdate,
-        };
-
-        await req.app.get('redis').addURI(uri, info);
-
-        info.destination = removeParams
-          ? URIHelper.removeTrackingParamas(destination)
-          : destination;
-
-        req.uriInfo = info;
-        next();
-      } else {
+      if (useRedis) {
         const redisResult = await req.app.get('redis').getURI(uri);
 
         if (redisResult) {
@@ -54,33 +35,31 @@ class ProcessController {
             : destination;
 
           req.uriInfo = redisResult;
-          next();
-        } else {
-          const destination = await URIHelper.follow(uri);
-          const security = await SecurityHelper.check(destination);
-          const lastUpdate = Date.now();
-          const info = {
-            shortURI: uri,
-            destination,
-            security,
-            lastUpdate,
-          };
-
-          await req.app.get('redis').addURI(uri, info);
-
-          info.destination = removeParams
-            ? URIHelper.removeTrackingParamas(destination)
-            : destination;
-
-          req.uriInfo = info;
-          next();
+          return next();
         }
       }
+
+      const destination = await URIHelper.follow(uri);
+      const security = await SecurityHelper.check(destination);
+      const lastUpdate = Date.now();
+      const info = {
+        shortURI: uri,
+        destination,
+        security,
+        lastUpdate,
+      };
+
+      await req.app.get('redis').addURI(uri, info);
+
+      info.destination = removeParams
+        ? URIHelper.removeTrackingParamas(destination)
+        : destination;
+
+      req.uriInfo = info;
+      return next();
     } catch (err) {
       return res.render('process/error');
     }
-
-    return true;
   }
 
   static giveAccessToken(req, res, next) {
