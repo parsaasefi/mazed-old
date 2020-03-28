@@ -20,12 +20,9 @@ class ProcessController {
   static async processURI(req, res, next) {
     try {
       const { uri } = req;
-      const { update, rp, redirect } = req.query;
+      const { update, rp } = req.query;
       const useCache = !(update && update.toLowerCase() === 'true');
       const removeParams = !(rp && rp.toLowerCase() === 'false');
-      const autoRedirect = redirect && redirect.toLowerCase() === 'true';
-
-      req.autoRedirect = autoRedirect;
 
       if (useCache) {
         const redisResult = await req.app.get('redis').getURI(uri);
@@ -86,8 +83,25 @@ class ProcessController {
     return next();
   }
 
+  static autoRedirect(req, res, next) {
+    const { uriInfo } = req;
+    const { redirect } = req.query;
+    const {
+      destination,
+      security: { isSafe },
+    } = uriInfo;
+    const autoRedirect = redirect && redirect.toLowerCase() === 'true';
+
+    if (autoRedirect && isSafe) {
+      console.log(isSafe);
+      return res.redirect(destination);
+    }
+
+    return next();
+  }
+
   static sendProcessResult(req, res) {
-    const { uriInfo, autoRedirect } = req;
+    const { uriInfo } = req;
     const { destination, lastUpdate } = uriInfo;
 
     if (!uriInfo.security.isSafe) {
@@ -98,10 +112,6 @@ class ProcessController {
         lastUpdate: format(lastUpdate),
         message,
       });
-    }
-
-    if (autoRedirect) {
-      return res.redirect(destination);
     }
 
     return res.render('process/success', {

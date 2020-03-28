@@ -11,6 +11,7 @@ router.get(
   ProcessController.validateProcess,
   ProcessController.processURI,
   ProcessController.giveAccessToken,
+  ProcessController.autoRedirect,
   ProcessController.sendProcessResult
 );
 
